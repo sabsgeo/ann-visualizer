@@ -39,7 +39,9 @@ def ann_viz(model, view=True, filename="network.gv", title="My Neural Network"):
     output_layer = 0;
     for layer in model.layers:
         if(layer == model.layers[0]):
-            input_layer = int(str(layer.input_shape).split(",")[1][1:-1]);
+            print(layer.input_shape)
+            print(str(layer.input_shape).split(",")[1])
+            input_layer = int(str(layer.input_shape).split(",")[1][1:-2]);
             hidden_layers_nr += 1;
             if (type(layer) == keras.layers.core.Dense):
                 hidden_layers.append(int(str(layer.output_shape).split(",")[1][1:-1]));
@@ -88,10 +90,10 @@ def ann_viz(model, view=True, filename="network.gv", title="My Neural Network"):
         g.graph_attr.update(splines="false", nodesep='1', ranksep='2');
         #Input Layer
         with g.subgraph(name='cluster_input') as c:
-            if(type(model.layers[0]) == keras.layers.core.Dense):
+            if(type(model.layers[0]) == keras.layers.core.Dense or type(model.layers[0]) == keras.engine.input_layer.InputLayer):
                 the_label = title+'\n\n\n\nInput Layer';
-                if (int(str(model.layers[0].input_shape).split(",")[1][1:-1]) > 10):
-                    the_label += " (+"+str(int(str(model.layers[0].input_shape).split(",")[1][1:-1]) - 10)+")";
+                if (int(str(model.layers[0].input_shape).split(",")[1][1:-2]) > 10):
+                    the_label += " (+"+str(int(str(model.layers[0].input_shape).split(",")[1][1:-2]) - 10)+")";
                     input_layer = 10;
                 c.attr(color='white')
                 for i in range(0, input_layer):
@@ -121,7 +123,7 @@ def ann_viz(model, view=True, filename="network.gv", title="My Neural Network"):
                 c.node(str(n), label="Image\n"+pxls[1]+" x"+pxls[2]+" pixels\n"+clrmap, fontcolor="white");
             else:
                 raise ValueError("ANN Visualizer: Layer not supported for visualizing");
-        for i in range(0, hidden_layers_nr):
+        for i in range(0, hidden_layers_nr - 1):
             with g.subgraph(name="cluster_"+str(i+1)) as c:
                 if (layer_types[i] == "Dense"):
                     c.attr(color='white');
