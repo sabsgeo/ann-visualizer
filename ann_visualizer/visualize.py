@@ -130,8 +130,8 @@ def ann_viz(model, view=True, filename="network.gv", title="My Neural Network"):
                     c.attr(rank='same');
                     #If hidden_layers[i] > 10, dont include all
                     the_label = "";
-                    if (int(str(model.layers[i].output_shape).split(",")[1][1:-1]) > 10):
-                        the_label += " (+"+str(int(str(model.layers[i].output_shape).split(",")[1][1:-1]) - 10)+")";
+                    if (int(str(model.layers[i].output_shape).split(",")[1][1:-2]) > 10):
+                        the_label += " (+"+str(int(str(model.layers[i].output_shape).split(",")[1][1:-2]) - 10)+")";
                         hidden_layers[i] = 10;
                     c.attr(labeljust="right", labelloc="b", label=the_label);
                     for j in range(0, hidden_layers[i]):
